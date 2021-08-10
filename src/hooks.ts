@@ -1,10 +1,6 @@
 import {CSSProperties, useEffect, useRef, useState} from 'react';
 import interact from 'interactjs';
 
-// type Partial<T> = {
-//     [P in keyof T]?: T[P];
-// }
-
 type Position = {
   width: number;
   height: number;
@@ -13,8 +9,8 @@ type Position = {
 }
 
 const initPosition : Position = {
-  width: 100,
-  height: 100,
+  width: 80,
+  height: 80,
   x: 0,
   y: 0,
 };
@@ -22,15 +18,15 @@ const initPosition : Position = {
 const edge = {
   minX: 0,
   minY: 0,
-  maxX: 200,
-  maxY: 200,
+  maxX: 160,
+  maxY: 160,
 };
 
 const emptySpace = {
-  minX: 200,
-  minY: 200,
-  maxX: 300,
-  maxY: 300,
+  minX: 160,
+  minY: 160,
+  maxX: 240,
+  maxY: 240,
 };
 
 /**
@@ -42,15 +38,15 @@ const emptySpace = {
 const judgePosition = (x: number, y: number): String => {
   const puzzlePositon = {
     a: {x: 0, y: 0},
-    b: {x: 100, y: 0},
-    c: {x: 200, y: 0},
-    d: {x: 0, y: 100},
-    e: {x: 100, y: 100},
-    f: {x: 200, y: 100},
-    g: {x: 0, y: 200},
-    h: {x: 100, y: 200},
-    i: {x: 200, y: 200},
-    j: {x: 300, y: 200},
+    b: {x: 80, y: 0},
+    c: {x: 160, y: 0},
+    d: {x: 0, y: 80},
+    e: {x: 80, y: 80},
+    f: {x: 160, y: 80},
+    g: {x: 0, y: 160},
+    h: {x: 80, y: 160},
+    i: {x: 160, y: 160},
+    j: {x: 240, y: 160},
   };
 
   if (puzzlePositon.a.x === x && puzzlePositon.a.y === y) {
@@ -124,29 +120,29 @@ export function useInteractJS(
           if (emptySpace.minX === x) {
             edge.minX = emptySpace.minX;
             edge.maxX = emptySpace.minX;
-            if ((emptySpace.minY - 100) <= y &&
+            if ((emptySpace.minY - 80) <= y &&
                   y < emptySpace.minY) {
-              edge.minY = emptySpace.minY - 100;
+              edge.minY = emptySpace.minY - 80;
               edge.maxY = emptySpace.minY;
             }
             if (emptySpace.minY < y &&
-                y <= (emptySpace.minY + 100)) {
+                y <= (emptySpace.minY + 80)) {
               edge.minY = emptySpace.minY;
-              edge.maxY = emptySpace.minY + 100;
+              edge.maxY = emptySpace.minY + 80;
             }
           }
           if (emptySpace.minY === y) {
             edge.minY = emptySpace.minY;
             edge.maxY = emptySpace.minY;
-            if ((emptySpace.minX - 100) <= x &&
+            if ((emptySpace.minX - 80) <= x &&
                   x < emptySpace.minX) {
-              edge.minX = emptySpace.minX - 100;
+              edge.minX = emptySpace.minX - 80;
               edge.maxX = emptySpace.minX;
             }
             if (emptySpace.minX < x &&
-                x <= (emptySpace.minX + 100)) {
+                x <= (emptySpace.minX + 80)) {
               edge.minX = emptySpace.minX;
-              edge.maxX = emptySpace.minX + 100;
+              edge.maxX = emptySpace.minX + 80;
             }
           }
           if (edge.minX <= x && x <= edge.maxX &&

@@ -1,7 +1,5 @@
 import React from 'react';
 import {useEffect} from 'react';
-// import {Box} from 'rebass';
-// import logo from './logo.svg';
 import './App.css';
 import {useInteractJS} from './hooks';
 import PazzleA from './img/sakasakuma-a.png';
@@ -14,84 +12,58 @@ import PazzleG from './img/sakasakuma-g.png';
 import PazzleH from './img/sakasakuma-h.png';
 import PazzleJ from './img/sakasakuma-j.png';
 
-
-/**
- * App function
- * @return {jsx}
- */
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.tsx</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
 /**
  * App function
  * @return {React.FC}
  */
 const App: React.FC = () => {
   const initPositionB = {
-    width: 100,
-    height: 100,
-    x: 100,
+    width: 80,
+    height: 80,
+    x: 80,
     y: 0,
   };
   const initPositionC = {
-    width: 100,
-    height: 100,
-    x: 200,
+    width: 80,
+    height: 80,
+    x: 160,
     y: 0,
   };
   const initPositionD = {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     x: 0,
-    y: 100,
+    y: 80,
   };
   const initPositionE = {
-    width: 100,
-    height: 100,
-    x: 100,
-    y: 100,
+    width: 80,
+    height: 80,
+    x: 80,
+    y: 80,
   };
   const initPositionF = {
-    width: 100,
-    height: 100,
-    x: 200,
-    y: 100,
+    width: 80,
+    height: 80,
+    x: 160,
+    y: 80,
   };
   const initPositionG = {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     x: 0,
-    y: 200,
+    y: 160,
   };
   const initPositionH = {
-    width: 100,
-    height: 100,
-    x: 100,
-    y: 200,
+    width: 80,
+    height: 80,
+    x: 80,
+    y: 160,
   };
   const initPositionJ = {
-    width: 100,
-    height: 100,
-    x: 300,
-    y: 200,
+    width: 80,
+    height: 80,
+    x: 240,
+    y: 160,
   };
   const interactA = useInteractJS();
   const interactB = useInteractJS(initPositionB);
@@ -223,7 +195,6 @@ const App: React.FC = () => {
   return (
     <div className='App'>
       {/* A (0,0) */}
-      {/* <Box></Box> */}
       <div
         ref={interactA.ref}
         style={{
@@ -233,7 +204,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* B (100,0) */}
+      {/* B (80,0) */}
       <div
         ref={interactB.ref}
         style={{
@@ -243,7 +214,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* C (200,0) */}
+      {/* C (160,0) */}
       <div
         ref={interactC.ref}
         style={{
@@ -253,7 +224,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* D (0,100) */}
+      {/* D (0,80) */}
       <div
         ref={interactD.ref}
         style={{
@@ -263,7 +234,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* E (100,100) */}
+      {/* E (80,80) */}
       <div
         ref={interactE.ref}
         style={{
@@ -273,7 +244,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* F (200,100) */}
+      {/* F (160,80) */}
       <div
         ref={interactF.ref}
         style={{
@@ -283,7 +254,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* G (0,200) */}
+      {/* G (0,160) */}
       <div
         ref={interactG.ref}
         style={{
@@ -293,7 +264,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* H (100,200) */}
+      {/* H (80,160) */}
       <div
         ref={interactH.ref}
         style={{
@@ -303,7 +274,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* I (200,200) */}
+      {/* I (160,160) */}
       <div
         ref={interactJ.ref}
         style={{

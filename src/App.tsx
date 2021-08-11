@@ -160,95 +160,97 @@ const App: React.FC = () => {
     // 画像に付随したアルファベット
     // （PazzleAの「A」）で並べると答えになる。
     <div className='App'>
-      {/* A */}
-      <div
-        ref={interactA.ref}
-        style={{
-          ...interactA.style,
-          backgroundImage: 'url(' + PazzleC + ')',
-          backgroundSize: 'cover',
-        }}
-      >
-      </div>
-      {/* B */}
-      <div
-        ref={interactB.ref}
-        style={{
-          ...interactB.style,
-          backgroundImage: 'url(' + PazzleH + ')',
-          backgroundSize: 'cover',
-        }}
-      >
-      </div>
-      {/* C */}
-      <div
-        ref={interactC.ref}
-        style={{
-          ...interactC.style,
-          backgroundImage: 'url(' + PazzleE + ')',
-          backgroundSize: 'cover',
-        }}
-      >
-      </div>
-      {/* D */}
-      <div
-        ref={interactD.ref}
-        style={{
-          ...interactD.style,
-          backgroundImage: 'url(' + PazzleD + ')',
-          backgroundSize: 'cover',
-        }}
-      >
-      </div>
-      {/* E */}
-      <div
-        ref={interactE.ref}
-        style={{
-          ...interactE.style,
-          backgroundImage: 'url(' + PazzleA + ')',
-          backgroundSize: 'cover',
-        }}
-      >
-      </div>
-      {/* F */}
-      <div
-        ref={interactF.ref}
-        style={{
-          ...interactF.style,
-          backgroundImage: 'url(' + PazzleF + ')',
-          backgroundSize: 'cover',
-        }}
-      >
-      </div>
-      {/* G */}
-      <div
-        ref={interactG.ref}
-        style={{
-          ...interactG.style,
-          backgroundImage: 'url(' + PazzleB + ')',
-          backgroundSize: 'cover',
-        }}
-      >
-      </div>
-      {/* H */}
-      <div
-        ref={interactH.ref}
-        style={{
-          ...interactH.style,
-          backgroundImage: 'url(' + PazzleG + ')',
-          backgroundSize: 'cover',
-        }}
-      >
-      </div>
-      {/* I */}
-      <div
-        ref={interactJ.ref}
-        style={{
-          ...interactJ.style,
-          backgroundImage: 'url(' + PazzleJ + ')',
-          backgroundSize: 'cover',
-        }}
-      >
+      <div className='App-puzzles'>
+        {/* A */}
+        <div
+          ref={interactA.ref}
+          style={{
+            ...interactA.style,
+            backgroundImage: 'url(' + PazzleC + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
+        {/* B */}
+        <div
+          ref={interactB.ref}
+          style={{
+            ...interactB.style,
+            backgroundImage: 'url(' + PazzleH + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
+        {/* C */}
+        <div
+          ref={interactC.ref}
+          style={{
+            ...interactC.style,
+            backgroundImage: 'url(' + PazzleE + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
+        {/* D */}
+        <div
+          ref={interactD.ref}
+          style={{
+            ...interactD.style,
+            backgroundImage: 'url(' + PazzleD + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
+        {/* E */}
+        <div
+          ref={interactE.ref}
+          style={{
+            ...interactE.style,
+            backgroundImage: 'url(' + PazzleA + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
+        {/* F */}
+        <div
+          ref={interactF.ref}
+          style={{
+            ...interactF.style,
+            backgroundImage: 'url(' + PazzleF + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
+        {/* G */}
+        <div
+          ref={interactG.ref}
+          style={{
+            ...interactG.style,
+            backgroundImage: 'url(' + PazzleB + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
+        {/* H */}
+        <div
+          ref={interactH.ref}
+          style={{
+            ...interactH.style,
+            backgroundImage: 'url(' + PazzleG + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
+        {/* I */}
+        <div
+          ref={interactJ.ref}
+          style={{
+            ...interactJ.style,
+            backgroundImage: 'url(' + PazzleJ + ')',
+            backgroundSize: 'cover',
+          }}
+        >
+        </div>
       </div>
     </div>
   );

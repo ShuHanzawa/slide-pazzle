@@ -1,7 +1,12 @@
 import React from 'react';
 import {useEffect} from 'react';
 import './App.css';
-import {useInteractJS} from './hooks';
+import {useInteractJS, puzzlePositon} from './hooks';
+// アルファベットと配置の関係
+// A B C
+// D E F
+// G H I J
+// 画像だけ差し替える場合は"答え"のアルファベット位置を当てはめる。
 import PazzleA from './img/sakasakuma-a.png';
 import PazzleB from './img/sakasakuma-b.png';
 import PazzleC from './img/sakasakuma-c.png';
@@ -17,66 +22,19 @@ import PazzleJ from './img/sakasakuma-j.png';
  * @return {React.FC}
  */
 const App: React.FC = () => {
-  const initPositionB = {
-    width: 80,
-    height: 80,
-    x: 80,
-    y: 0,
-  };
-  const initPositionC = {
-    width: 80,
-    height: 80,
-    x: 160,
-    y: 0,
-  };
-  const initPositionD = {
-    width: 80,
-    height: 80,
-    x: 0,
-    y: 80,
-  };
-  const initPositionE = {
-    width: 80,
-    height: 80,
-    x: 80,
-    y: 80,
-  };
-  const initPositionF = {
-    width: 80,
-    height: 80,
-    x: 160,
-    y: 80,
-  };
-  const initPositionG = {
-    width: 80,
-    height: 80,
-    x: 0,
-    y: 160,
-  };
-  const initPositionH = {
-    width: 80,
-    height: 80,
-    x: 80,
-    y: 160,
-  };
-  const initPositionJ = {
-    width: 80,
-    height: 80,
-    x: 240,
-    y: 160,
-  };
   const interactA = useInteractJS();
-  const interactB = useInteractJS(initPositionB);
-  const interactC = useInteractJS(initPositionC);
-  const interactD = useInteractJS(initPositionD);
-  const interactE = useInteractJS(initPositionE);
-  const interactF = useInteractJS(initPositionF);
-  const interactG = useInteractJS(initPositionG);
-  const interactH = useInteractJS(initPositionH);
-  const interactJ = useInteractJS(initPositionJ);
+  const interactB = useInteractJS(puzzlePositon.b);
+  const interactC = useInteractJS(puzzlePositon.c);
+  const interactD = useInteractJS(puzzlePositon.d);
+  const interactE = useInteractJS(puzzlePositon.e);
+  const interactF = useInteractJS(puzzlePositon.f);
+  const interactG = useInteractJS(puzzlePositon.g);
+  const interactH = useInteractJS(puzzlePositon.h);
+  const interactJ = useInteractJS(puzzlePositon.j);
 
   useEffect(() => {
-    console.log('useEffect');
+    // midway(パズルのピースを動かしている途中)の場合
+    // 動かしているピース以外は動かないようにする。
     if (interactA.positionName === 'midway') {
       interactB.disable();
       interactC.disable();
@@ -159,6 +117,8 @@ const App: React.FC = () => {
       interactG.disable();
       interactH.disable();
     } else {
+      // midway以外の場合は全てのピースを動かせる状態にする。
+      // → 結果的には稼働範囲が存在するピースだけが動かせる。
       interactA.enable();
       interactB.enable();
       interactC.enable();
@@ -183,7 +143,7 @@ const App: React.FC = () => {
 
   // 初回のみ。
   useEffect(() => {
-    console.log('first set');
+    // F, H, J以外は動かないようにする。
     interactA.disable();
     interactB.disable();
     interactC.disable();
@@ -193,8 +153,14 @@ const App: React.FC = () => {
   }, []);
 
   return (
+    // アルファベットと配置の関係
+    // A B C
+    // D E F
+    // G H I J
+    // 画像に付随したアルファベット
+    // （PazzleAの「A」）で並べると答えになる。
     <div className='App'>
-      {/* A (0,0) */}
+      {/* A */}
       <div
         ref={interactA.ref}
         style={{
@@ -204,7 +170,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* B (80,0) */}
+      {/* B */}
       <div
         ref={interactB.ref}
         style={{
@@ -214,7 +180,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* C (160,0) */}
+      {/* C */}
       <div
         ref={interactC.ref}
         style={{
@@ -224,7 +190,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* D (0,80) */}
+      {/* D */}
       <div
         ref={interactD.ref}
         style={{
@@ -234,7 +200,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* E (80,80) */}
+      {/* E */}
       <div
         ref={interactE.ref}
         style={{
@@ -244,7 +210,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* F (160,80) */}
+      {/* F */}
       <div
         ref={interactF.ref}
         style={{
@@ -254,7 +220,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* G (0,160) */}
+      {/* G */}
       <div
         ref={interactG.ref}
         style={{
@@ -264,7 +230,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* H (80,160) */}
+      {/* H */}
       <div
         ref={interactH.ref}
         style={{
@@ -274,7 +240,7 @@ const App: React.FC = () => {
         }}
       >
       </div>
-      {/* I (160,160) */}
+      {/* I */}
       <div
         ref={interactJ.ref}
         style={{

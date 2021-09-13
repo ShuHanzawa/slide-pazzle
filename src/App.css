@@ -3,13 +3,16 @@
 } */
 
 .App {
-  text-align: center;
+  margin: 20px;
 }
 
 .App-puzzles {
-  margin: 20px;
+  width: 400px;
+  height: 250px;
   touch-action: none;
 }
+
+
 
 .App-logo {
   height: 40vmin;

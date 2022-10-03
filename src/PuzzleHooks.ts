@@ -1,9 +1,6 @@
 import {CSSProperties, useEffect, useRef, useState} from 'react';
-import interact from 'interactjs';
 
 type Position = {
-  width: number;
-  height: number;
   x: number;
   y: number;
 }
@@ -19,31 +16,24 @@ const side = 80;
 // D E F
 // G H I J
 export const puzzlePositon = {
-  a: {width: side, height: side, x: 0, y: 0},
-  b: {width: side, height: side, x: side, y: 0},
-  c: {width: side, height: side, x: side * 2, y: 0},
-  d: {width: side, height: side, x: 0, y: side},
-  e: {width: side, height: side, x: side, y: side},
-  f: {width: side, height: side, x: side * 2, y: side},
-  g: {width: side, height: side, x: 0, y: side * 2},
-  h: {width: side, height: side, x: side, y: side * 2},
-  i: {width: side, height: side, x: side * 2, y: side * 2},
-  j: {width: side, height: side, x: side * 3, y: side * 2},
+  a: {x: 0, y: 0},
+  b: {x: side, y: 0},
+  c: {x: side * 2, y: 0},
+  d: {x: 0, y: side},
+  e: {x: side, y: side},
+  f: {x: side * 2, y: side},
+  g: {x: 0, y: side * 2},
+  h: {x: side, y: side * 2},
+  i: {x: side * 2, y: side * 2},
+  j: {x: side * 3, y: side * 2},
 };
 
 // デフォルトの位置（Aの位置）
 const initPosition : Position = puzzlePositon.a;
 
-const edge = {
-  minX: 0,
-  minY: 0,
-  maxX: 160,
-  maxY: 160,
-};
-
-const emptyPosition = {
-  minX: 160,
-  minY: 160,
+const empPos = {
+  x: 160,
+  y: 160,
 };
 
 /**
@@ -104,127 +94,83 @@ export function useInteractJS(
     ...position,
   });
 
-  const [isEnabled, setEnable] = useState(false);
-
   const interactRef = useRef(null);
-  let {x, y, width, height} = _position;
+  let {x, y} = _position;
 
-  const enable = () => {
-    interact((interactRef.current as unknown) as HTMLElement)
-        .draggable({
-          inertia: false,
-        })
-        .resizable({
-          // resize from all edges and corners
-          edges: {left: true, right: true, bottom: true, top: true},
-          preserveAspectRatio: false,
-          inertia: false,
-        })
-        .on('dragmove', (event) => {
-          // 考え方）四角形の左上の角の座標を元に制御している。
-          // 空いているピースのx座標と
-          // ピースを動かした後のx座標とが同じ場合。
-          // →つまりピースを縦に動かしている場合。
-          if (emptyPosition.minX === x) {
-            // x座標の稼働範囲は「0」とする。
-            edge.minX = emptyPosition.minX;
-            edge.maxX = emptyPosition.minX;
-            // 上から下に移動させている場合。
-            if ((emptyPosition.minY - side) <= y &&
-                  y < emptyPosition.minY) {
-              // y座標の稼働範囲は
-              // 空いているピースのy座標 - side < y < 空いているピースのy座標
-              edge.minY = emptyPosition.minY - side;
-              edge.maxY = emptyPosition.minY;
-            }
-            // 下から上に移動させている場合。
-            if (emptyPosition.minY < y &&
-                y <= (emptyPosition.minY + side)) {
-              // y座標の稼働範囲は
-              // 空いているピースのy座標 < y < 空いているピースのy座標 + side
-              edge.minY = emptyPosition.minY;
-              edge.maxY = emptyPosition.minY + side;
-            }
-          }
-          // 空いているピースのy座標と
-          // ピースを動かした後のy座標とが同じ場合。
-          // →つまりピースを横に動かしている場合。
-          if (emptyPosition.minY === y) {
-            // y座標の稼働範囲は「0」とする。
-            edge.minY = emptyPosition.minY;
-            edge.maxY = emptyPosition.minY;
-            // 左から右に移動させている場合。
-            if ((emptyPosition.minX - side) <= x &&
-                  x < emptyPosition.minX) {
-              // x座標の稼働範囲は
-              // 空いているピースのx座標 - side < x < 空いているピースのx座標
-              edge.minX = emptyPosition.minX - side;
-              edge.maxX = emptyPosition.minX;
-            }
-            // 右から左に移動させている場合。
-            if (emptyPosition.minX < x &&
-                x <= (emptyPosition.minX + side)) {
-              // x座標の稼働範囲は
-              // 空いているピースのy座標 < x < 空いているピースのx座標 + side
-              edge.minX = emptyPosition.minX;
-              edge.maxX = emptyPosition.minX + side;
-            }
-          }
-          if (edge.minX <= x && x <= edge.maxX &&
-                edge.minY <= y && y <= edge.maxY) {
-            x += event.dx;
-            y += event.dy;
-            // 稼働範囲を越えたら、稼働範囲内に収める処理。
-            // 各最大値の確認
-            x = x >= edge.maxX? edge.maxX : x;
-            y = y >= edge.maxY? edge.maxY : y;
-            // 各最小値の確認
-            x = x <= edge.minX? edge.minX : x;
-            y = y <= edge.minY? edge.minY : y;
-            setPosition({
-              width,
-              height,
-              x,
-              y,
-            });
-          }
-          // emptyPositionの更新
-          const tempPositionName = judgePosition(x, y);
-          console.log(tempPositionName);
-          if (emptyPosition.minX === x && emptyPosition.minY === y) {
-            emptyPosition.minX = (emptyPosition.minX === edge.minX)?
-                                 edge.maxX : edge.minX;
-            emptyPosition.minY = (emptyPosition.minY === edge.minY)?
-                                 edge.maxY : edge.minY;
-          }
-        });
+  const move = () => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // 下キー入力の場合処理を行う
+      if (event.key === 'ArrowDown') {
+        if (y == empPos.y-80 && x == empPos.x) {
+          y+=80;
+          empPos.y-=80;
+          setPosisions(x, y, empPos.x, empPos.y, event.key);
+        }
+      }
+      // 上キー入力の場合処理を行う
+      if (event.key === 'ArrowUp') {
+        if (y == empPos.y+80 && x == empPos.x) {
+          y-=80;
+          empPos.y+=80;
+          setPosisions(x, y, empPos.x, empPos.y, event.key);
+        }
+      }
+      // 右キー入力の場合処理を行う
+      if (event.key === 'ArrowRight') {
+        if (y == empPos.y && x == empPos.x-80) {
+          x+=80;
+          empPos.x-=80;
+          setPosisions(x, y, empPos.x, empPos.y, event.key);
+        }
+      }
+      // 左キー入力の場合処理を行う
+      if (event.key === 'ArrowLeft') {
+        if (y == empPos.y && x == empPos.x+80) {
+          x-=80;
+          empPos.x+=80;
+          setPosisions(x, y, empPos.x, empPos.y, event.key);
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown, false);
   };
 
-  const disable = () => {
-    interact((interactRef.current as unknown) as HTMLElement).unset();
-  };
+  /**
+   * @param {number} x ピースのx座標
+   * @param {number} y ピースのy座標
+   * @param {number} X 空白ピースのx座標
+   * @param {number} Y 空白ピースのy座標
+   * @param {string} key 空白ピースのy座標
+   * @return {void}
+   */
+  function setPosisions(
+      x: number, y: number, X: number, Y: number, key: string): void {
+    setPosition({
+      x,
+      y,
+    });
+    console.log('press:'+key);
+    console.log('ピース'+(x/80+1)+','+(y/80+1));
+    const empX=X/80+1;
+    const empY=Y/80+1;
+    console.log('空白'+empX+','+empY);
+    const tempPositionName = judgePosition(x, y);
+    console.log(tempPositionName);
+  }
 
   useEffect(() => {
-    if (isEnabled) {
-      enable();
-    } else {
-      disable();
-    }
-    return disable;
-  }, [isEnabled]);
+    move();
+  } );
 
   return {
     ref: interactRef,
     style: {
       transform: `translate3D(${_position.x}px, ${_position.y}px, 0)`,
-      width: _position.width + 'px',
-      height: _position.height + 'px',
+      width: 80 + 'px',
+      height: 80 + 'px',
       position: 'absolute' as CSSProperties['position'],
     },
     positionName: judgePosition(_position.x, _position.y),
     position: _position,
-    isEnabled,
-    enable: () => setEnable(true),
-    disable: () => setEnable(false),
   };
 }

@@ -1,4 +1,5 @@
 import {CSSProperties, useEffect, useRef, useState} from 'react';
+import {useKeyPress} from 'react-use';
 
 type Position = {
   x: number;
@@ -97,44 +98,43 @@ export function useInteractJS(
   const interactRef = useRef(null);
   let {x, y} = _position;
 
-  const move = () => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // 下キー入力の場合処理を行う
-      if (event.key === 'ArrowDown') {
-        if (y == empPos.y-80 && x == empPos.x) {
-          y+=80;
-          empPos.y-=80;
-          setPosisions(x, y, empPos.x, empPos.y, event.key);
-        }
-      }
-      // 上キー入力の場合処理を行う
-      if (event.key === 'ArrowUp') {
-        if (y == empPos.y+80 && x == empPos.x) {
-          y-=80;
-          empPos.y+=80;
-          setPosisions(x, y, empPos.x, empPos.y, event.key);
-        }
-      }
-      // 右キー入力の場合処理を行う
-      if (event.key === 'ArrowRight') {
-        if (y == empPos.y && x == empPos.x-80) {
-          x+=80;
-          empPos.x-=80;
-          setPosisions(x, y, empPos.x, empPos.y, event.key);
-        }
-      }
-      // 左キー入力の場合処理を行う
-      if (event.key === 'ArrowLeft') {
-        if (y == empPos.y && x == empPos.x+80) {
-          x-=80;
-          empPos.x+=80;
-          setPosisions(x, y, empPos.x, empPos.y, event.key);
-        }
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown, false);
-  };
+  const [_down] = useKeyPress('ArrowDown');
+  const [_up] = useKeyPress('ArrowUp');
+  const [_right] = useKeyPress('ArrowRight');
+  const [_left] = useKeyPress('ArrowLeft');
 
+  const down = () => {
+    if (y == empPos.y-80 && x == empPos.x) {
+      y+=80;
+      empPos.y-=80;
+      setPosisions(x, y, empPos.x, empPos.y);
+      console.log('down pushed');
+    }
+  };
+  const up = () => {
+    if (y == empPos.y+80 && x == empPos.x) {
+      y-=80;
+      empPos.y+=80;
+      setPosisions(x, y, empPos.x, empPos.y);
+      console.log('up pushed');
+    }
+  };
+  const right = () => {
+    if (y == empPos.y && x == empPos.x-80) {
+      x+=80;
+      empPos.x-=80;
+      setPosisions(x, y, empPos.x, empPos.y);
+      console.log('right pushed');
+    }
+  };
+  const left = () => {
+    if (y == empPos.y && x == empPos.x+80) {
+      x-=80;
+      empPos.x+=80;
+      setPosisions(x, y, empPos.x, empPos.y);
+      console.log('left pushed');
+    }
+  };
   /**
    * @param {number} x ピースのx座標
    * @param {number} y ピースのy座標
@@ -144,22 +144,55 @@ export function useInteractJS(
    * @return {void}
    */
   function setPosisions(
-      x: number, y: number, X: number, Y: number, key: string): void {
+      x: number, y: number, X: number, Y: number): void {
     setPosition({
       x,
       y,
     });
-    console.log('press:'+key);
-    console.log('ピース'+(x/80+1)+','+(y/80+1));
-    const empX=X/80+1;
-    const empY=Y/80+1;
-    console.log('空白'+empX+','+empY);
+    // console.log('press:'+key);
+    // console.log('ピース'+(x/80+1)+','+(y/80+1));
+    // const empX=X/80+1;
+    // const empY=Y/80+1;
+    // console.log('空白'+empX+','+empY);
     const tempPositionName = judgePosition(x, y);
     console.log(tempPositionName);
   }
 
+  let pushed=0;
+
   useEffect(() => {
-    move();
+    if (_down) {
+      if (pushed==0) {
+        down();
+        pushed=1;
+      }
+    } else {
+      pushed=0;
+    }
+    if (_up) {
+      if (pushed==0) {
+        up();
+        pushed=1;
+      }
+    } else {
+      pushed=0;
+    }
+    if (_right) {
+      if (pushed==0) {
+        right();
+        pushed=1;
+      }
+    } else {
+      pushed=0;
+    }
+    if (_left) {
+      if (pushed==0) {
+        left();
+        pushed=1;
+      }
+    } else {
+      pushed=0;
+    }
   } );
 
   return {

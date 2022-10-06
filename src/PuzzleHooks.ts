@@ -44,11 +44,11 @@ const empPos = {
 };
 
 /**
- * 動かしたピースの現在のpositionを判断する関数
- * @param {number} x
- * @param {number} y
- * @return {string}
- */
+* 動かしたピースの現在のpositionを判断する関数
+* @param {number} x
+* @param {number} y
+* @return {string}
+*/
 const judgePosition = (x: number, y: number): string => {
   if (puzzlePositon.a.x === x && puzzlePositon.a.y === y) {
     return 'A';

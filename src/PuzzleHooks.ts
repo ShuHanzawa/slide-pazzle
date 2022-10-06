@@ -1,21 +1,31 @@
 import {CSSProperties, useEffect, useRef, useState} from 'react';
-import {useKeyPress} from 'react-use';
-
 type Position = {
+  name: string,
   x: number;
   y: number;
 }
 
-// 正方形の一辺
+type Piece = {
+  name: string;
+  image: string;
+  ans: string;
+  position: Position;
+}
+
+type Pieces = {
+  a: Piece;
+  b: Piece;
+  c: Piece;
+  d: Piece;
+  e: Piece;
+  f: Piece;
+  g: Piece;
+  h: Piece;
+  i: Piece;
+}
+
 const side = 80;
 
-// アルファベットと配置の関係
-// 各ピースの初期値とサイズ
-// サイズ : side×sideで固定
-// 座標 : 四角形の左上の座標
-// A B C
-// D E F
-// G H I J
 export const puzzlePositon = {
   a: {x: 0, y: 0},
   b: {x: side, y: 0},
@@ -25,12 +35,8 @@ export const puzzlePositon = {
   f: {x: side * 2, y: side},
   g: {x: 0, y: side * 2},
   h: {x: side, y: side * 2},
-  i: {x: side * 2, y: side * 2},
-  j: {x: side * 3, y: side * 2},
+  i: {x: side * 3, y: side * 2},
 };
-
-// デフォルトの位置（Aの位置）
-const initPosition : Position = puzzlePositon.a;
 
 const empPos = {
   x: 160,
@@ -41,9 +47,9 @@ const empPos = {
  * 動かしたピースの現在のpositionを判断する関数
  * @param {number} x
  * @param {number} y
- * @return {String}
+ * @return {string}
  */
-const judgePosition = (x: number, y: number): String => {
+const judgePosition = (x: number, y: number): string => {
   if (puzzlePositon.a.x === x && puzzlePositon.a.y === y) {
     return 'A';
   } else if (puzzlePositon.b.x === x &&
@@ -70,9 +76,6 @@ const judgePosition = (x: number, y: number): String => {
   } else if (puzzlePositon.i.x === x &&
                 puzzlePositon.i.y === y) {
     return 'I';
-  } else if (puzzlePositon.j.x === x &&
-                puzzlePositon.j.y === y) {
-    return 'J';
   } else {
     // 中途半端な位置
     return 'midway';
@@ -80,130 +83,116 @@ const judgePosition = (x: number, y: number): String => {
 };
 
 /**
- * HTML要素を動かせるようにする
- * 返り値で取得できるinteractRefと、interactStyleをそれぞれ対象となるHTML要素の
- * refとstyleに指定することで、そのHTML要素の(リサイズ)と移動が可能になる
- * @param {Partial} position - HTML要素の初期座標と大きさ、指定されない場合はinitPositionで指定された値になる。
- * @return {interactRef}
+ * @param {Pieces} pieces - HTML要素の初期座標と大きさ、指定されない場合はinitPositionで指定された値になる。
+ * @param {string} pushedKey
+ * @param {string} movePiece
+* @return {interactRef}
  */
-export function useInteractJS(
-    position: Position = initPosition,
+export function slidePiece(
+    pieces: Pieces,
+    pushedKey: string,
+    movePiece: string,
 ) {
-  // スプレット演算子の特性で後半のpositionの方が優先される。（initPositionの方は必要ないかも）
-  const [_position, setPosition] = useState({
-    ...initPosition,
-    ...position,
-  });
-
-  const interactRef = useRef(null);
-  let {x, y} = _position;
-
-  const [_down] = useKeyPress('ArrowDown');
-  const [_up] = useKeyPress('ArrowUp');
-  const [_right] = useKeyPress('ArrowRight');
-  const [_left] = useKeyPress('ArrowLeft');
-
-  const down = () => {
-    if (y == empPos.y-80 && x == empPos.x) {
-      y+=80;
-      empPos.y-=80;
-      setPosisions(x, y, empPos.x, empPos.y);
-      console.log('down pushed');
-    }
-  };
-  const up = () => {
-    if (y == empPos.y+80 && x == empPos.x) {
-      y-=80;
-      empPos.y+=80;
-      setPosisions(x, y, empPos.x, empPos.y);
-      console.log('up pushed');
-    }
-  };
-  const right = () => {
-    if (y == empPos.y && x == empPos.x-80) {
-      x+=80;
-      empPos.x-=80;
-      setPosisions(x, y, empPos.x, empPos.y);
-      console.log('right pushed');
-    }
-  };
-  const left = () => {
-    if (y == empPos.y && x == empPos.x+80) {
-      x-=80;
-      empPos.x+=80;
-      setPosisions(x, y, empPos.x, empPos.y);
-      console.log('left pushed');
-    }
-  };
   /**
-   * @param {number} x ピースのx座標
-   * @param {number} y ピースのy座標
-   * @param {number} X 空白ピースのx座標
-   * @param {number} Y 空白ピースのy座標
-   * @param {string} key 空白ピースのy座標
-   * @return {void}
-   */
-  function setPosisions(
-      x: number, y: number, X: number, Y: number): void {
-    setPosition({
-      x,
-      y,
-    });
-    // console.log('press:'+key);
-    // console.log('ピース'+(x/80+1)+','+(y/80+1));
-    // const empX=X/80+1;
-    // const empY=Y/80+1;
-    // console.log('空白'+empX+','+empY);
-    const tempPositionName = judgePosition(x, y);
-    console.log(tempPositionName);
+  * @param {Piece} piece
+  * @param {string} pushedKey
+  * @param {string} movePiece
+  * @return {Position}
+  **/
+  function slide(piece: Piece, pushedKey: string, movePiece: string) {
+    let [x, y] = [piece.position.x, piece.position.y];
+    if (piece.name==movePiece) {
+      switch (pushedKey) {
+        case 'up':
+          y-=80;
+          empPos.y+=80;
+          break;
+        case 'down':
+          y+=80;
+          empPos.y-=80;
+          break;
+        case 'right':
+          x+=80;
+          empPos.x-=80;
+          break;
+        case 'left':
+          x-=80;
+          empPos.x+=80;
+          break;
+      }
+    }
+    return piece.position;
   }
 
-  let pushed=0;
-
   useEffect(() => {
-    if (_down) {
-      if (pushed==0) {
-        down();
-        pushed=1;
-      }
-    } else {
-      pushed=0;
-    }
-    if (_up) {
-      if (pushed==0) {
-        up();
-        pushed=1;
-      }
-    } else {
-      pushed=0;
-    }
-    if (_right) {
-      if (pushed==0) {
-        right();
-        pushed=1;
-      }
-    } else {
-      pushed=0;
-    }
-    if (_left) {
-      if (pushed==0) {
-        left();
-        pushed=1;
-      }
-    } else {
-      pushed=0;
-    }
-  } );
+    pieces.a.position = slide(pieces.a, pushedKey, movePiece);
+    pieces.b.position = slide(pieces.b, pushedKey, movePiece);
+    pieces.c.position = slide(pieces.c, pushedKey, movePiece);
+    pieces.d.position = slide(pieces.d, pushedKey, movePiece);
+    pieces.e.position = slide(pieces.e, pushedKey, movePiece);
+    pieces.f.position = slide(pieces.f, pushedKey, movePiece);
+    pieces.g.position = slide(pieces.g, pushedKey, movePiece);
+    pieces.h.position = slide(pieces.h, pushedKey, movePiece);
+    pieces.i.position = slide(pieces.i, pushedKey, movePiece);
+  });
+  return pieces;
+}
 
-  return {
-    ref: interactRef,
-    style: {
-      transform: `translate3D(${_position.x}px, ${_position.y}px, 0)`,
-      width: 80 + 'px',
-      height: 80 + 'px',
-      position: 'absolute' as CSSProperties['position'],
-    },
-    positionName: judgePosition(_position.x, _position.y),
-    position: _position,
-  };
+/**
+* @param {string} pieces
+* @param {string} pushedKey
+* @return {string}
+**/
+export function selectMovePiece(
+    pieces: Pieces,
+    pushedKey: string,
+) {
+  let movePiece = 'none';
+  movePiece = select(pieces.a, pushedKey, movePiece);
+  movePiece = select(pieces.b, pushedKey, movePiece);
+  movePiece = select(pieces.c, pushedKey, movePiece);
+  movePiece = select(pieces.d, pushedKey, movePiece);
+  movePiece = select(pieces.e, pushedKey, movePiece);
+  movePiece = select(pieces.f, pushedKey, movePiece);
+  movePiece = select(pieces.g, pushedKey, movePiece);
+  movePiece = select(pieces.h, pushedKey, movePiece);
+  movePiece = select(pieces.i, pushedKey, movePiece);
+  movePiece = select(pieces.j, pushedKey, movePiece);
+
+  /**
+  * @param {Piece} piece
+  * @param {string} pushedKey
+  * @param {string} movePiece
+  * @return {string}
+  */
+  function select(piece: Piece, pushedKey: string, movePiece:string) {
+    if (pushedKey!='none' && movePiece=='none') {
+      const name = piece.name;
+      const [x, y] = [piece.position.x, piece.position.y];
+      switch (pushedKey) {
+        case 'down':
+          if (y == empPos.y-80 && x == empPos.x) {
+            movePiece=name;
+          }
+          break;
+        case 'up':
+          if (y == empPos.y+80 && x == empPos.x) {
+            movePiece=name;
+          }
+          break;
+        case 'right':
+          if (y == empPos.y && x == empPos.x-80) {
+            movePiece=name;
+          }
+          break;
+        case 'left':
+          if (y == empPos.y && x == empPos.x+80) {
+            movePiece=name;
+          }
+          break;
+      }
+    }
+    return movePiece;
+  }
+  return movePiece;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useKeyPressEvent} from 'react-use';
 import './App.css';
-import {slidePiece, selectMovePiece} from './PuzzleHooks';
+import {updateStyle, pieces, selectMovePiece} from './PuzzleHooks';
 import PazzleA from './img/sakasakuma-a.png';
 import PazzleB from './img/sakasakuma-b.png';
 import PazzleC from './img/sakasakuma-c.png';
@@ -12,40 +12,8 @@ import PazzleG from './img/sakasakuma-g.png';
 import PazzleH from './img/sakasakuma-h.png';
 import PazzleI from './img/sakasakuma-i.png';
 
-let pushedKey = 'none';
-let movePiece = 'none';
-
-// 初期配置の宣言
-const side = 80;
-let pieces = {
-  a: {
-    name: 'a', image: PazzleA, ans: 'A',
-    position: {name: 'A', x: 0, y: 0}},
-  b: {
-    name: 'b', image: PazzleB, ans: 'B',
-    position: {name: 'B', x: side, y: 0}},
-  c: {
-    name: 'c', image: PazzleC, ans: 'C',
-    position: {name: 'C', x: side * 2, y: 0}},
-  d: {
-    name: 'd', image: PazzleD, ans: 'D',
-    position: {name: 'D', x: 0, y: side}},
-  e: {
-    name: 'e', image: PazzleE, ans: 'E',
-    position: {name: 'E', x: side, y: side}},
-  f: {
-    name: 'f', image: PazzleF, ans: 'F',
-    position: {name: 'F', x: side * 2, y: side}},
-  g: {
-    name: 'g', image: PazzleG, ans: 'G',
-    position: {name: 'G', x: 0, y: side * 2}},
-  h: {
-    name: 'h', image: PazzleH, ans: 'H',
-    position: {name: 'H', x: side, y: side * 2}},
-  i: {
-    name: 'i', image: PazzleI, ans: 'I',
-    position: {name: 'J', x: side * 3, y: side * 2}},
-};
+let key = 'none';
+let piece = 'none';
 
 /**
  * App function
@@ -65,41 +33,51 @@ const App: React.FC = () => {
       (e)=>{
         switch (e.key) {
           case 'ArrowDown':
-            pushedKey = 'down';
+            key = 'down';
             break;
           case 'ArrowUp':
-            pushedKey = 'up';
+            key = 'up';
             break;
           case 'ArrowLeft':
-            pushedKey = 'left';
+            key = 'left';
             break;
           case 'ArrowRight':
-            pushedKey = 'right';
+            key = 'right';
             break;
         }
       },
       ()=>{
-        pushedKey = 'none';
+        key = 'none';
       },
   );
-
-  console.log('pushedKey:'+pushedKey);
-  movePiece = selectMovePiece(pieces, pushedKey);
-  console.log('movePiece:'+movePiece);
-  pieces = slidePiece(pieces, pushedKey, movePiece);
-  movePiece='none';
+  console.log('key:'+key);
+  piece = selectMovePiece(pieces, key);
+  console.log('movePiece:'+piece);
+  const styles = {
+    a: {style: updateStyle(pieces.a, piece, key), image: PazzleA, ans: 'A'},
+    b: {style: updateStyle(pieces.b, piece, key), image: PazzleB, ans: 'B'},
+    c: {style: updateStyle(pieces.c, piece, key), image: PazzleC, ans: 'C'},
+    d: {style: updateStyle(pieces.d, piece, key), image: PazzleD, ans: 'D'},
+    e: {style: updateStyle(pieces.e, piece, key), image: PazzleE, ans: 'E'},
+    f: {style: updateStyle(pieces.f, piece, key), image: PazzleF, ans: 'F'},
+    g: {style: updateStyle(pieces.g, piece, key), image: PazzleG, ans: 'G'},
+    h: {style: updateStyle(pieces.h, piece, key), image: PazzleH, ans: 'H'},
+    i: {style: updateStyle(pieces.i, piece, key), image: PazzleI, ans: 'I'}};
+  piece='none';
 
   // 答えの判定フラグ
-  const ansFlg = pieces.a.position.name === pieces.a.ans &&
-  pieces.b.position.name === pieces.b.ans &&
-  pieces.c.position.name === pieces.c.ans &&
-  pieces.d.position.name === pieces.d.ans &&
-  pieces.e.position.name === pieces.e.ans &&
-  pieces.f.position.name === pieces.f.ans &&
-  pieces.g.position.name === pieces.g.ans &&
-  pieces.h.position.name === pieces.h.ans &&
-  pieces.i.position.name === pieces.i.ans;
+  const ansFlg = pieces.a.position.name === styles.a.ans &&
+  pieces.b.position.name === styles.b.ans &&
+  pieces.c.position.name === styles.c.ans &&
+  pieces.d.position.name === styles.d.ans &&
+  pieces.e.position.name === styles.e.ans &&
+  pieces.f.position.name === styles.f.ans &&
+  pieces.g.position.name === styles.g.ans &&
+  pieces.h.position.name === styles.h.ans &&
+  pieces.i.position.name === styles.i.ans;
 
+  console.log('h.x:'+pieces.h.position.x);
+  console.log('h.y:'+pieces.h.position.y);
   return (
     // 小文字アルファベットとピースの初期配置
     // a b c
@@ -114,12 +92,8 @@ const App: React.FC = () => {
         {/* A */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.a.position.y + 'px',
-            left: pieces.a.position.x + 'px',
-            backgroundImage: 'url(' + pieces.a.image + ')',
+            ...styles.a.style,
+            backgroundImage: 'url(' + styles.a.image + ')',
             backgroundSize: 'cover',
           }}
         >
@@ -127,12 +101,8 @@ const App: React.FC = () => {
         {/* B */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.b.position.y + 'px',
-            left: pieces.b.position.x + 'px',
-            backgroundImage: 'url(' + pieces.b.image + ')',
+            ...styles.b.style,
+            backgroundImage: 'url(' + styles.b.image + ')',
             backgroundSize: 'cover',
           }}
         >
@@ -140,12 +110,8 @@ const App: React.FC = () => {
         {/* C */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.c.position.y + 'px',
-            left: pieces.c.position.x + 'px',
-            backgroundImage: 'url(' + pieces.c.image + ')',
+            ...styles.c.style,
+            backgroundImage: 'url(' + styles.c.image + ')',
             backgroundSize: 'cover',
           }}
         >
@@ -153,12 +119,8 @@ const App: React.FC = () => {
         {/* D */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.d.position.y + 'px',
-            left: pieces.d.position.x + 'px',
-            backgroundImage: 'url(' + pieces.d.image + ')',
+            ...styles.d.style,
+            backgroundImage: 'url(' + styles.d.image + ')',
             backgroundSize: 'cover',
           }}
         >
@@ -166,12 +128,8 @@ const App: React.FC = () => {
         {/* E */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.e.position.y + 'px',
-            left: pieces.e.position.x + 'px',
-            backgroundImage: 'url(' + pieces.e.image + ')',
+            ...styles.e.style,
+            backgroundImage: 'url(' + styles.e.image + ')',
             backgroundSize: 'cover',
           }}
         >
@@ -179,12 +137,8 @@ const App: React.FC = () => {
         {/* F */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.f.position.y + 'px',
-            left: pieces.f.position.x + 'px',
-            backgroundImage: 'url(' + pieces.f.image + ')',
+            ...styles.f.style,
+            backgroundImage: 'url(' + styles.f.image + ')',
             backgroundSize: 'cover',
           }}
         >
@@ -192,12 +146,8 @@ const App: React.FC = () => {
         {/* G */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.g.position.y + 'px',
-            left: pieces.g.position.x + 'px',
-            backgroundImage: 'url(' + pieces.g.image + ')',
+            ...styles.g.style,
+            backgroundImage: 'url(' + styles.g.image + ')',
             backgroundSize: 'cover',
           }}
         >
@@ -205,12 +155,8 @@ const App: React.FC = () => {
         {/* H */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.h.position.y + 'px',
-            left: pieces.h.position.x + 'px',
-            backgroundImage: 'url(' + pieces.h.image + ')',
+            ...styles.h.style,
+            backgroundImage: 'url(' + styles.h.image + ')',
             backgroundSize: 'cover',
           }}
         >
@@ -218,12 +164,8 @@ const App: React.FC = () => {
         {/* I */}
         <div
           style={{
-            width: '80px',
-            height: '80px',
-            position: 'absolute',
-            top: pieces.i.position.y + 'px',
-            left: pieces.i.position.x + 'px',
-            backgroundImage: 'url(' + pieces.i.image + ')',
+            ...styles.i.style,
+            backgroundImage: 'url(' + styles.i.image + ')',
             backgroundSize: 'cover',
           }}
         >

@@ -12,22 +12,14 @@ import PazzleG from './img/sakasakuma-g.png';
 import PazzleH from './img/sakasakuma-h.png';
 import PazzleI from './img/sakasakuma-i.png';
 
-let key = 'none';
-let piece = 'none';
+let key = 'none'; // 押されたキーの判定変数
+let piece = 'none'; // 動かすピースの判定変数
 
 /**
- * App function
- * @return {React.FC}
- */
+* @return {React.FC}
+*/
 const App: React.FC = () => {
-// アルファベットと配置の関係
-// A B C
-// D E F
-// G H I J
-// piece : 各ピースのコンポーネント
-// image : パズルで表示する画像
-// ans : 「アルファベットと配置の関係」に沿った答えの位置
-
+  // キー入力の検知と場合分け
   useKeyPressEvent(
       (e)=>true,
       (e)=>{
@@ -47,12 +39,15 @@ const App: React.FC = () => {
         }
       },
       ()=>{
-        key = 'none';
+        key = 'none'; // 押されていなかったらすぐにnoneにする
       },
   );
-  console.log('key:'+key);
-  piece = selectMovePiece(pieces, key);
-  console.log('movePiece:'+piece);
+  piece = selectMovePiece(pieces, piece, key); // どのピースを動かすべきか判定
+  if (key != 'none') {
+    console.log('pushedKey:'+key);
+    console.log('movePiece:'+piece);
+  }
+  // ピースの位置を含むCSSを更新
   const styles = {
     a: {style: updateStyle(pieces.a, piece, key), image: PazzleA, ans: 'A'},
     b: {style: updateStyle(pieces.b, piece, key), image: PazzleB, ans: 'B'},
@@ -63,7 +58,7 @@ const App: React.FC = () => {
     g: {style: updateStyle(pieces.g, piece, key), image: PazzleG, ans: 'G'},
     h: {style: updateStyle(pieces.h, piece, key), image: PazzleH, ans: 'H'},
     i: {style: updateStyle(pieces.i, piece, key), image: PazzleI, ans: 'I'}};
-  piece='none';
+  piece='none'; // 動かすピースを初期化
 
   // 答えの判定フラグ
   const ansFlg = pieces.a.position.name === styles.a.ans &&
@@ -76,14 +71,12 @@ const App: React.FC = () => {
   pieces.h.position.name === styles.h.ans &&
   pieces.i.position.name === styles.i.ans;
 
-  console.log('h.x:'+pieces.h.position.x);
-  console.log('h.y:'+pieces.h.position.y);
   return (
-    // 小文字アルファベットとピースの初期配置
+    // ピース名前と初期配置
     // a b c
     // d e f
     // g h _ i
-    // 大文字アルファベットと配置の関係
+    // 位置の名前
     // A B C
     // D E F
     // G H I J

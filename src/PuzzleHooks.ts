@@ -1,16 +1,19 @@
 import {CSSProperties, useEffect, useState} from 'react';
 
+// 位置の型宣言
 type Position = {
   name: string,
   x: number;
   y: number;
 }
 
+// ピースの型宣言
 type Piece = {
   name: string;
   position: Position;
 }
 
+// ピースの集合の型宣言
 type Pieces = {
   a: Piece;
   b: Piece;
@@ -23,8 +26,8 @@ type Pieces = {
   i: Piece;
 }
 
+// ピースの集合の変数宣言
 const side = 80;
-
 export const pieces = {
   a: {name: 'a', position: {name: 'A', x: 0, y: 0}},
   b: {name: 'b', position: {name: 'B', x: side, y: 0}},
@@ -37,8 +40,10 @@ export const pieces = {
   i: {name: 'i', position: {name: 'J', x: side * 3, y: side * 2}},
 };
 
+// ピースの初期値
 const initPiece : Piece = pieces.a;
 
+// 隙間の変数宣言
 const empPos = {
   x: 160,
   y: 160,
@@ -83,23 +88,27 @@ const judgePosition = (x: number, y: number): string => {
   }
 };
 
+
 /**
+* 位置を含むCSSを更新する関数
 * @param {Piece} piece
 * @param {string} movePiece
 * @param {string} pushedKey
 * @return {Style}
- */
+*/
 export function updateStyle(
     piece: Piece = initPiece,
     movePiece: string,
     pushedKey: string,
 ) {
+  // ピースの状態を_pieceに保持
   const [_piece, setPiece] = useState({
     ...initPiece,
     ...piece,
   });
   const {name, position} = _piece;
 
+  // 押されたキーによって、隙間とピースを交換する
   const slide = () => {
     switch (pushedKey) {
       case 'up':
@@ -119,14 +128,15 @@ export function updateStyle(
         empPos.x+=80;
         break;
     }
-    const tempPos = judgePosition(position.x, position.y);
-    console.log('tempPos:'+tempPos);
+    position.name = judgePosition(position.x, position.y);
+    // console.log('tempPos:'+position.name);
+    // pieceの状態を更新
     setPiece({name, position});
   };
 
   useEffect(() => {
+    // ピースの名前と動かすべきピースが一致した場合にスライドを実行
     if (_piece.name==movePiece) {
-      console.log('exec');
       slide();
     }
   });
@@ -141,15 +151,18 @@ export function updateStyle(
 }
 
 /**
+* どのピースを動かすべきか判定
 * @param {string} pieces
+* @param {string} movePiece
 * @param {string} pushedKey
 * @return {string}
 **/
 export function selectMovePiece(
     pieces: Pieces,
+    movePiece: string,
     pushedKey: string,
 ) {
-  let movePiece = 'none';
+  // 各ピースに対して、判定を実行
   movePiece = select(pieces.a, pushedKey, movePiece);
   movePiece = select(pieces.b, pushedKey, movePiece);
   movePiece = select(pieces.c, pushedKey, movePiece);
@@ -159,14 +172,16 @@ export function selectMovePiece(
   movePiece = select(pieces.g, pushedKey, movePiece);
   movePiece = select(pieces.h, pushedKey, movePiece);
   movePiece = select(pieces.i, pushedKey, movePiece);
-  console.log('emp:'+empPos.x+','+empPos.y);
   /**
+  * 押されたキーと隙間の位置に対して、ピースが動かすべきか判定する関数
   * @param {Piece} piece
   * @param {string} pushedKey
   * @param {string} movePiece
   * @return {string}
   */
   function select(piece: Piece, pushedKey: string, movePiece:string) {
+    // movePieceがnoneの時だけ実行
+    // これを行わないと複数ピース同時に動いてしまう
     if (pushedKey!='none' && movePiece=='none') {
       const name = piece.name;
       const [x, y] = [piece.position.x, piece.position.y];

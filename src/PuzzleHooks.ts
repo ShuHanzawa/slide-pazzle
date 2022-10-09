@@ -1,4 +1,4 @@
-import {CSSProperties, useEffect, useRef, useState} from 'react';
+import {useEffect} from 'react';
 type Position = {
   name: string,
   x: number;
@@ -43,44 +43,44 @@ const empPos = {
   y: 160,
 };
 
-/**
-* 動かしたピースの現在のpositionを判断する関数
-* @param {number} x
-* @param {number} y
-* @return {string}
-*/
-const judgePosition = (x: number, y: number): string => {
-  if (puzzlePositon.a.x === x && puzzlePositon.a.y === y) {
-    return 'A';
-  } else if (puzzlePositon.b.x === x &&
-                puzzlePositon.b.y === y) {
-    return 'B';
-  } else if (puzzlePositon.c.x === x &&
-                puzzlePositon.c.y === y) {
-    return 'C';
-  } else if (puzzlePositon.d.x === x &&
-                puzzlePositon.d.y === y) {
-    return 'D';
-  } else if (puzzlePositon.e.x === x &&
-                puzzlePositon.e.y === y) {
-    return 'E';
-  } else if (puzzlePositon.f.x === x &&
-                puzzlePositon.f.y === y) {
-    return 'F';
-  } else if (puzzlePositon.g.x === x &&
-                puzzlePositon.g.y === y) {
-    return 'G';
-  } else if (puzzlePositon.h.x === x &&
-                puzzlePositon.h.y === y) {
-    return 'H';
-  } else if (puzzlePositon.i.x === x &&
-                puzzlePositon.i.y === y) {
-    return 'I';
-  } else {
-    // 中途半端な位置
-    return 'midway';
-  }
-};
+// /**
+// * 動かしたピースの現在のpositionを判断する関数
+// * @param {number} x
+// * @param {number} y
+// * @return {string}
+// */
+// const judgePosition = (x: number, y: number): string => {
+//   if (puzzlePositon.a.x === x && puzzlePositon.a.y === y) {
+//     return 'A';
+//   } else if (puzzlePositon.b.x === x &&
+//                 puzzlePositon.b.y === y) {
+//     return 'B';
+//   } else if (puzzlePositon.c.x === x &&
+//                 puzzlePositon.c.y === y) {
+//     return 'C';
+//   } else if (puzzlePositon.d.x === x &&
+//                 puzzlePositon.d.y === y) {
+//     return 'D';
+//   } else if (puzzlePositon.e.x === x &&
+//                 puzzlePositon.e.y === y) {
+//     return 'E';
+//   } else if (puzzlePositon.f.x === x &&
+//                 puzzlePositon.f.y === y) {
+//     return 'F';
+//   } else if (puzzlePositon.g.x === x &&
+//                 puzzlePositon.g.y === y) {
+//     return 'G';
+//   } else if (puzzlePositon.h.x === x &&
+//                 puzzlePositon.h.y === y) {
+//     return 'H';
+//   } else if (puzzlePositon.i.x === x &&
+//                 puzzlePositon.i.y === y) {
+//     return 'I';
+//   } else {
+//     // 中途半端な位置
+//     return 'midway';
+//   }
+// };
 
 /**
  * @param {Pieces} pieces - HTML要素の初期座標と大きさ、指定されない場合はinitPositionで指定された値になる。
@@ -100,7 +100,8 @@ export function slidePiece(
   * @return {Position}
   **/
   function slide(piece: Piece, pushedKey: string, movePiece: string) {
-    let [x, y] = [piece.position.x, piece.position.y];
+    let x = piece.position.x;
+    let y = piece.position.y;
     if (piece.name==movePiece) {
       switch (pushedKey) {
         case 'up':
@@ -121,6 +122,8 @@ export function slidePiece(
           break;
       }
     }
+    piece.position.x = x;
+    piece.position.y = y;
     return piece.position;
   }
 
@@ -157,7 +160,6 @@ export function selectMovePiece(
   movePiece = select(pieces.g, pushedKey, movePiece);
   movePiece = select(pieces.h, pushedKey, movePiece);
   movePiece = select(pieces.i, pushedKey, movePiece);
-  movePiece = select(pieces.j, pushedKey, movePiece);
 
   /**
   * @param {Piece} piece

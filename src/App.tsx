@@ -114,7 +114,11 @@ const App: React.FC = () => {
         {/* A */}
         <div
           style={{
-            ...placement.a.piece.style,
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.a.position.y + 'px',
+            left: pieces.a.position.x + 'px',
             backgroundImage: 'url(' + pieces.a.image + ')',
             backgroundSize: 'cover',
           }}
@@ -122,80 +126,104 @@ const App: React.FC = () => {
         </div>
         {/* B */}
         <div
-          ref={placement.b.piece.ref}
           style={{
-            ...placement.b.piece.style,
-            backgroundImage: 'url(' + placement.b.image + ')',
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.b.position.y + 'px',
+            left: pieces.b.position.x + 'px',
+            backgroundImage: 'url(' + pieces.b.image + ')',
             backgroundSize: 'cover',
           }}
         >
         </div>
         {/* C */}
         <div
-          ref={placement.c.piece.ref}
           style={{
-            ...placement.c.piece.style,
-            backgroundImage: 'url(' + placement.c.image + ')',
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.c.position.y + 'px',
+            left: pieces.c.position.x + 'px',
+            backgroundImage: 'url(' + pieces.c.image + ')',
             backgroundSize: 'cover',
           }}
         >
         </div>
         {/* D */}
         <div
-          ref={placement.d.piece.ref}
           style={{
-            ...placement.d.piece.style,
-            backgroundImage: 'url(' + placement.d.image + ')',
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.d.position.y + 'px',
+            left: pieces.d.position.x + 'px',
+            backgroundImage: 'url(' + pieces.d.image + ')',
             backgroundSize: 'cover',
           }}
         >
         </div>
         {/* E */}
         <div
-          ref={placement.e.piece.ref}
           style={{
-            ...placement.e.piece.style,
-            backgroundImage: 'url(' + placement.e.image + ')',
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.e.position.y + 'px',
+            left: pieces.e.position.x + 'px',
+            backgroundImage: 'url(' + pieces.e.image + ')',
             backgroundSize: 'cover',
           }}
         >
         </div>
         {/* F */}
         <div
-          ref={placement.f.piece.ref}
           style={{
-            ...placement.f.piece.style,
-            backgroundImage: 'url(' + placement.f.image + ')',
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.f.position.y + 'px',
+            left: pieces.f.position.x + 'px',
+            backgroundImage: 'url(' + pieces.f.image + ')',
             backgroundSize: 'cover',
           }}
         >
         </div>
         {/* G */}
         <div
-          ref={placement.g.piece.ref}
           style={{
-            ...placement.g.piece.style,
-            backgroundImage: 'url(' + placement.g.image + ')',
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.g.position.y + 'px',
+            left: pieces.g.position.x + 'px',
+            backgroundImage: 'url(' + pieces.g.image + ')',
             backgroundSize: 'cover',
           }}
         >
         </div>
         {/* H */}
         <div
-          ref={placement.h.piece.ref}
           style={{
-            ...placement.h.piece.style,
-            backgroundImage: 'url(' + placement.h.image + ')',
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.h.position.y + 'px',
+            left: pieces.h.position.x + 'px',
+            backgroundImage: 'url(' + pieces.h.image + ')',
             backgroundSize: 'cover',
           }}
         >
         </div>
         {/* I */}
         <div
-          ref={placement.j.piece.ref}
           style={{
-            ...placement.j.piece.style,
-            backgroundImage: 'url(' + placement.j.image + ')',
+            width: '80px',
+            height: '80px',
+            position: 'absolute',
+            top: pieces.i.position.y + 'px',
+            left: pieces.i.position.x + 'px',
+            backgroundImage: 'url(' + pieces.i.image + ')',
             backgroundSize: 'cover',
           }}
         >
